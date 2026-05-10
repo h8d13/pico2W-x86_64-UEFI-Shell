@@ -1,0 +1,8 @@
+# Vendored toolchain / generated trees (large, fetched by README instructions)
+pico-sdk/
+picotool/
+picotool-install/
+
+# Build outputs
+firmware/build/
+firmware/shellx64.efi

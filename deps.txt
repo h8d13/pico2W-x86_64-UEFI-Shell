@@ -1,0 +1,40 @@
+# Arch packages. Install all at once:
+#   sudo pacman -S --needed \
+#     arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-binutils \
+#     cmake libusb xorriso git python \
+#     clang libc++ libc++abi \
+#     dosfstools mtools \
+#     qemu-system-x86 edk2-ovmf
+
+# Pico firmware
+arm-none-eabi-gcc        # cross-compile RP2350 / Cortex-M33
+arm-none-eabi-newlib     # libc for ARM target
+arm-none-eabi-binutils   # ARM assembler + linker
+cmake                    # pico-sdk build system
+libusb                   # picotool to talk to Pico in BOOTSEL
+git                      # clone pico-sdk + picotool
+python                   # SDK helper scripts
+
+# Picotool host build. Arch GCC 16 + glibc 2.43 currently break picotool's C++
+# (struct __pthread_mutex_s.__unused vs pico-sdk's __unused macro). Clang works.
+clang
+libc++
+libc++abi
+
+# ISO assembly
+xorriso                  # ISO9660 + El Torito (UEFI platform entry)
+dosfstools               # mkfs.vfat for the EFI FAT image
+mtools                   # mmd/mcopy without root-mount
+
+# Optional, QEMU testing
+qemu-system-x86
+edk2-ovmf
+
+# Fetched at build time, not via pacman:
+#   pico-sdk 2.1.1   https://github.com/raspberrypi/pico-sdk
+#                    submodules: tinyusb, btstack, cyw43-driver, lwip, mbedtls
+#   picotool 2.2.0   https://github.com/raspberrypi/picotool
+#                    built with `-include picotool/_prefix.h` to force
+#                    <pthread.h> in before pico-sdk's __unused macro.
+#   shellx64.efi     https://github.com/pbatard/UEFI-Shell/releases/latest
+#                    auto-downloaded by CMakeLists.txt at configure time.
